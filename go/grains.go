@@ -2,7 +2,6 @@ package grains
 
 import (
 	"errors"
-	"math"
 )
 
 const numberOfSquares = 64
@@ -13,17 +12,19 @@ func Square(n int) (uint64, error) {
 		return 0, errors.New("square value should be between 1 and 64")
 	}
 
-	return uint64(math.Pow(2, float64(n)-1)), nil
+	// n << x is "n times 2, x times". And y >> z is "y divided by 2, z times".
+	// For example, 1 << 5 is "1 times 2, 5 times" or 32.
+	// And 32 >> 5 is "32 divided by 2, 5 times" or 1.
+	return 1 << (n - 1), nil
 }
 
 // Total returns the total grains in the chessboard
 func Total() uint64 {
-	var total uint64
+	total, err := Square(64)
 
-	for i := 1; i <= numberOfSquares; i++ {
-		n, _ := Square(i)
-		total += n
+	if err != nil {
+		panic("got error")
 	}
 
-	return total
+	return total*2 - 1
 }
