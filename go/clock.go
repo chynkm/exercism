@@ -1,8 +1,10 @@
 package clock
 
-import "strconv"
+import (
+	"strconv"
+)
 
-// Clock
+// Clock structure
 type Clock struct {
 	h int
 	m int
@@ -17,8 +19,10 @@ func New(h, m int) *Clock {
 // String returns the string format of Clock in "hh:mm" format
 func (c *Clock) String() string {
 	var hour, min string
+	// using a new variable for hour
 	var extraH int
 
+	// using a new variable for minute
 	tempM := c.m
 	if tempM < 0 {
 		extraH = -1
@@ -61,4 +65,19 @@ func (c *Clock) String() string {
 	}
 
 	return hour + ":" + min
+}
+
+// Add minutes to a Clock
+func (c *Clock) Add(m int) *Clock {
+	c.m += m
+	if c.m >= 60 {
+		c.h += c.m / 60
+		c.m = c.m % 60
+	}
+
+	if c.h >= 24 {
+		c.h = c.h % 24
+	}
+
+	return c
 }
